@@ -1,0 +1,257 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: lighter;
+    box-sizing: border-box;
+  }
+  
+  body {
+    color: black;
+    font-family: sans-serif;
+    margin: 0;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 10%;
+  }
+  
+  header h1 {
+    font-size: 40px;
+    margin-left: 20px;
+  }
+  
+  header nav {
+    align-items: center;
+    padding: 0 40px;
+    font-size: 20px;
+    
+  }
+  
+  nav ul {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    font-size: 30px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: black;
+    transition: color 0.3s;
+  }
+  
+  nav ul li:nth-child(1) a {
+    color: #6186ff;
+  }
+  
+  nav ul li:nth-child(2) a {
+    color: #c7c7c7;
+  }
+  
+  nav ul li:nth-child(3) a {
+    color: #baff75;
+  }
+  
+  section#intro p{   
+    text-align: center;
+    padding: 1%;
+    margin-left: auto;
+    margin-bottom: 5%;
+    margin-right: auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 90%;
+  }
+
+  section#intro {
+    margin-bottom: 5%;
+    width: 100%;
+  }
+
+  section#welcome {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid black;
+  }
+  
+  section#intro h2 {
+    font-size: 36px;
+    margin-top: 20px;
+    margin-left: 5%;
+    font-weight: bold;
+  }
+  
+  .gallery {
+    display: flex;
+    justify-content: center;
+    gap: 0px;
+  }
+  
+  .gallery img {
+    width: 35%;
+    height: auto;
+  }
+  
+  .information {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  section#mission {
+    background-color: #6186ff;
+    color: white;
+    padding: 70px 20px;
+    margin: 0;
+    width: 100%;
+  }
+  
+  section#mission h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  
+  section#mission p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #000;
+  }
+  
+  section#info {
+    display: flex;
+    width: 50%;
+  }
+  
+  section#info .about {
+    background-color: #c7c7c7;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  section#info .about h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  section#info .about p {
+    font-size: 16px;
+  }
+  
+  section#contact {
+    display: flex;
+    margin: 0;
+    width: 50%;
+    background-color: #baff75;
+    padding: 90px;
+    box-sizing: border-box;
+    flex-direction: column;
+  }
+  
+  section#contact .contactxt h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  section#contact .contactxt form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  section#contact .contactxt input {
+    padding: 10px;
+    border: 1px solid #000;
+    background-color: transparent;
+    border-radius: 4px;
+  }
+  
+  section#contact .contactxt button {
+    padding: 5px;
+    width: 30%;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-left: 70%;
+    transition: background-color 0.3s;
+  }
+  
+  section#contact .contactxt button:hover {
+    background-color: #ddd;
+  }
+  
+  .dashboard {
+    margin-top: 3%;
+}
+
+.dashboard h2{
+    font-size: 250%;
+    margin-left: 80px;
+    font-weight: lighter;
+}
+
+.dashboard p{
+    margin-left: 80px;
+    font-weight: lighter;
+}
+
+.cards {
+    display: flex;
+    margin-left: 80px;
+    margin-right: 80px;
+    justify-content: space-between;
+}
+
+.weather, .news, .horoscope {
+    border: 2px lightgray solid;
+    width: 28%;
+    padding: 2%;
+    cursor: pointer;
+}
+
+.weather:hover, .news:hover, .horoscope:hover{
+    border: 2px rgb(0, 0, 0) solid;
+}
+
+.weather:hover .linkArticle, .news:hover .linkArticle, .horoscope:hover .linkArticle{
+    text-decoration: underline;
+}
+
+.weather p, .news p, .horoscope p{
+    margin-left: 0px;
+    text-align: justify;
+}
+
+
+.weather h3, .news h3, .horoscope h3{
+    margin: 0px;
+}
+
+
+.weather h4, .news h4, .horoscope h4{
+    color: rgb(215, 215, 215);
+    font-size:90%;
+}
+  
+  
+footer {
+    margin-top: 5%;
+    border-top: 1px grey solid;
+    margin-left: 80px;
+    margin-right: 80px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 2%;
+    margin-bottom: 10%;
+}
+
+footer ul li .mission, .about, .contact{
+    color: black;
+}
+
+footer .ul {
+    list-style: none;
+    text-decoration: underline;
+}

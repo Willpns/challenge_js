@@ -1,0 +1,180 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-weight: lighter;
+  box-sizing: border-box;
+}
+
+body {
+  color: black;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 270px 0 80px 0;
+  font-family: sans-serif;
+}
+
+ul {
+  text-align: right;
+  list-style-type: none;
+}
+
+li {
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+nav {
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  position: fixed;
+  font-size: 50px;
+  padding: 30px 40px;
+  justify-content: space-between;
+}
+
+nav ul {
+  display: flex;
+}
+
+nav ul a {
+  padding-bottom: 10px;
+}
+
+nav ul li:nth-child(1) a {
+  color: #6186ff;
+}
+
+nav ul li:nth-child(2) a {
+  color: #c7c7c7;
+}
+
+nav ul li:nth-child(3) a {
+  color: #baff75;
+}
+
+header {
+  width: 100%;
+  height: 58px;
+  padding: 20px 0;
+  margin: 0 100px;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+img {
+  width: calc(100% / 3);
+}
+
+section {
+  display: flex;
+  padding: 100px;
+}
+
+section:nth-of-type(1) {
+  padding: 0;
+  width: 100%;
+}
+
+section:nth-of-type(2) {
+  width: 100%;
+  flex-direction: column;
+  background-color: #6186ff;
+}
+
+section:nth-of-type(3) {
+  width: 50%;
+  flex-direction: column;
+  background-color: #c7c7c7;
+}
+
+section:nth-of-type(4) {
+  width: 50%;
+  min-height: 450px;
+  flex-direction: column;
+  background-color: #baff75;
+}
+
+section:nth-of-type(5) {
+  width: 100%;
+  flex-direction: column;
+}
+
+section:nth-of-type(5) h2 {
+  color: black;
+}
+
+h1 {
+  width: 100%;
+  font-size: 50px;
+  font-weight: bold;
+  padding: 65px 100px 80px 100px;
+}
+
+h2 {
+  color: white;
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px;
+  margin-top: 25px;
+  border-radius: 0;
+  font-family: sans-serif;
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+input::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+button {
+  outline: none;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  color: rgba(50, 50, 50);
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+section:nth-of-type(4) button {
+  align-self: flex-end;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  padding: 30px 0;
+  line-height: 25px;
+  border-top: 1px solid grey;
+  margin: 120px 100px 0 100px;
+  justify-content: space-between;
+}
+
+footer ul {
+  display: flex;
+  align-self: flex-end;
+  flex-direction: column;
+  text-decoration: underline;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
