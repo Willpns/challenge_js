@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <style>
+
+            header{
+                background-color: #0C120C;
+                border-bottom: solid 3px #6D7275;
+            }
+            body{
+                margin: 0px;
+                background-color: #C7D6D5;
+            }
+
+            #centercolumn{
+                border-left: solid 2px rgb(45, 204, 45);
+                border-right: solid 2px rgb(45, 204, 45);
+                margin-left: auto;
+                margin-right: auto;
+                width: 40%;
+                height: auto;
+                background-color: #9AA899;
+            }
+    
+            #tasklist{
+                padding-top: 1px;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-bottom: 5px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                height: auto;
+                background-color: #9AA899;
+            }
+    
+            #newtask{
+                border-radius: 5px;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                height: 50px;
+                width: 100px;
+                border: none;
+                background-color: rgb(45, 204, 45);
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 20%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+    
+            .task{
+                min-height: 100px;
+                word-wrap: break-word;
+                font-size: 25px;
+                border-radius:5px;
+                border: solid 3px #54577C;
+                margin-top: 5px;
+                background-color: #ECEBF3;
+                width: 100%;
+                height: auto;
+            }
+
+            #taskvalue{
+                height: 30px;
+                border: solid 3px rgb(45, 204, 45);
+                border-radius: 5px;
+                position: absolute;
+                top: 40%;
+                left: 20%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+    
+        </style>    
+    </head>
+
+    <header>
+        <input id="taskvalue">
+        <button id="newtask">New Task</button>
+    </header>
+
+
+    <body>
+        <div id="centercolumn">
+            <div id="tasklist">
+                
+            </div>
+        </div>
+    </body>
+
+
+    <script type="module" src='to-do-list.js'></script>
+
+
+</html>
