@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cash</title>
+    <style>
+    * {
+    margin: 0;
+    padding: 0
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100vh;
+    background-color: brown;
+}
+
+.butt {
+    color: rgb(255, 255, 255);
+    background-color: gray;
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 50px;
+    aspect-ratio: 1/1;
+    font-size: 30px;
+    transition: 1s;
+}
+
+.butt:hover {
+    transition: 1s;
+    background-color: rgb(0, 94, 0);
+}
+
+input[type="number"] {
+    font-size: 25px; 
+    border: 2px solid black;
+    background: white
+}
+
+
+.buttons {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+</head>
+
+<body style="overflow-y: hidden;overflow-x: hidden;">
+    <div id="container">
+        <div id="entry_div" class="morice">
+
+            <div class="buttons">
+                <button class="butt" data-devise="dollar" onclick="selectCurrency(this, true)">$</button>
+                <button class="butt" data-devise="euro" onclick="selectCurrency(this, true)">€</button>
+                <button class="butt" data-devise="livre" onclick="selectCurrency(this, true)">£</button>
+                <button class="butt" data-devise="bitcoin" onclick="selectCurrency(this, true)">&#8383;</button>
+            </div>
+            <input id="entry" type="number" autocomplete="off" placeholder="1" name="name" />
+
+        </div>
+
+        <div id="output_div" class="morice">
+            <div class="buttons">
+                <button class="butt" data-devise="dollar" onclick="selectCurrency(this, false)">$</button>
+                <button class="butt" data-devise="euro" onclick="selectCurrency(this, false)">€</button>
+                <button class="butt" data-devise="livre" onclick="selectCurrency(this, false)">£</button>
+                <button class="butt" data-devise="bitcoin" onclick="selectCurrency(this, false)">&#8383;</button>
+            </div>
+            <input type="number" disabled placeholder="1" id="result"/>
+        </div>
+    </div>
+</body>
+<script src='./cash.js'></script>
+
+</html>
