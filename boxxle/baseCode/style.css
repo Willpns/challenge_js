@@ -1,17 +1,82 @@
 body {
-    background: rgb(176, 149, 30);
     font-family: Arial, sans-serif;
-    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    padding: 0;
     height: 100vh;
+    background-color: #474346;
+    background-size: cover;
+    background-position: center; 
+    background-attachment: fixed; 
+}
+
+#level-indicator {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 #gameboard {
     display: grid;
     gap: 2px;
+    background-color: #ddd;
+    padding: 10px 10px 5px;
+    border: 3px solid #aaa;
+    background-image: url('./assets/PNG/Default size/Ground/ground_01.png'); 
+    background-size: auto; 
+    background-repeat: repeat;
+}
+
+#resetButton {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+#nextLevelButton {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #202122;
+    transform: scale(1.1); 
+}
+
+button:active {
+    background-color: #202122;
+    transform: scale(0.95); 
 }
 
 .tile-container {
@@ -29,11 +94,11 @@ body {
 
 
 .wall {
-    background-image: url('./assets/PNG/Default size/Blocks/block_05.png');
+    background-image: url('./assets/PNG/Default size/Blocks/block_02.png');
 }
 
 .box {
-    background-image: url('./assets/PNG/Default size/Crates/crate_01.png');
+    background-image: url('./assets/PNG/Default size/Crates/crate_12.png');
     z-index: 2;
 }
 
@@ -64,10 +129,7 @@ body {
     z-index: 1;
 }
 
-.player-on-target {
-    border: 2px solid yellow; 
-}
-
 .box-on-target {
-    background-image: url('./assets/PNG/Default size/Crates/crate_10.png');
+    background-image: url('./assets/PNG/Default size/Crates/crate_02.png');
+    z-index: 2;
 }

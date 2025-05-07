@@ -1,63 +1,92 @@
 import { Levels } from './level.js';
 
 const gameboard = document.getElementById('gameboard');
+const resetButton = document.getElementById('resetButton');
+const nextLevelButton = document.getElementById('nextLevelButton');
+const levelIndicator = document.createElement('div'); 
+
+levelIndicator.id = 'level-indicator';
+levelIndicator.style.position = 'absolute';
+levelIndicator.style.top = '10px';
+levelIndicator.style.left = '10px';
+levelIndicator.style.fontSize = '20px';
+levelIndicator.style.fontWeight = 'bold';
+levelIndicator.style.color = '#333';
+document.body.appendChild(levelIndicator);
+
 const keys = {
-    37: 'left',  // Flèche gauche
-    38: 'up',    // Flèche haut
-    39: 'right', // Flèche droite
-    40: 'down',  // Flèche bas
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down',
 };
+
 let currentLevel = 0;
 let playerPosition = { x: 0, y: 0 };
 let playerDirection = 'down';
+let fixedLevel = [];
+let dynamicLevel = [];
+const levelTransitionDelay = 500; 
 
 function initGame(level) {
-    gameboard.innerHTML = ''; 
-    gameboard.style.gridTemplateColumns = `repeat(${level[0].length}, 1fr)`;
-    gameboard.style.gridTemplateRows = `repeat(${level.length}, 1fr)`;
+    fixedLevel = level.map(row => row.map(cell => (cell === 4 || cell === 1 ? cell : 0)));
+    dynamicLevel = level.map(row => row.map(cell => (cell === 2 || cell === 3 ? cell : 0)));
+    updateLevelIndicator(); 
+    renderGame();
+}
 
-    level.forEach((row, y) => {
-        row.forEach((cell, x) => {
+function updateLevelIndicator() {
+    levelIndicator.textContent = `Level : ${currentLevel + 1}`; 
+}
+
+function renderGame() {
+    gameboard.innerHTML = '';
+    gameboard.style.gridTemplateColumns = `repeat(${fixedLevel[0].length}, 1fr)`;
+    gameboard.style.gridTemplateRows = `repeat(${fixedLevel.length}, 1fr)`;
+
+    fixedLevel.forEach((row, y) => {
+        row.forEach((fixedCell, x) => {
             const tileContainer = document.createElement('div');
             tileContainer.className = 'tile-container';
 
-            if (Levels[currentLevel][y][x] === 4) {
+            if (fixedCell === 4) {
                 const targetTile = document.createElement('div');
                 targetTile.className = 'target';
                 tileContainer.appendChild(targetTile);
+            } else if (fixedCell === 1) {
+                const wallTile = document.createElement('div');
+                wallTile.className = 'wall';
+                tileContainer.appendChild(wallTile);
             }
 
-            const mainTile = document.createElement('div');
-            mainTile.className = getClassName(cell, x, y);
-            tileContainer.appendChild(mainTile);
+            const dynamicCell = dynamicLevel[y][x];
+            if (dynamicCell !== 0) {
+                const mainTile = document.createElement('div');
+                mainTile.className = getClassName(dynamicCell, fixedCell);
+                tileContainer.appendChild(mainTile);
+
+                if (dynamicCell === 3) playerPosition = { x, y };
+            }
 
             gameboard.appendChild(tileContainer);
-
-            if (cell === 3) playerPosition = { x, y };
         });
     });
 }
 
-function getClassName(value, x, y) {
-    if (value === 2 && Levels[currentLevel][y][x] === 4) {
-        return 'box-on-target'; 
+function getClassName(dynamicCell, fixedCell) {
+    if (dynamicCell === 2 && fixedCell === 4) {
+        return 'box-on-target';
     }
-    if (value === 3 && Levels[currentLevel][y][x] === 4) {
-        return `player player-${playerDirection} player-on-target`; 
+    if (dynamicCell === 3) { 
+        return `player player-${playerDirection}`;
     }
-    if (value === 3) {
-        return `player player-${playerDirection}`; 
+    if (dynamicCell === 2) {
+        return 'box';
     }
-    switch (value) {
-        case 0: return 'empty'; 
-        case 1: return 'wall';  
-        case 2: return 'box';   
-        default: return '';
-    }
+    return '';
 }
 
 function movePlayer(direction) {
-    const level = Levels[currentLevel];
     const { x, y } = playerPosition;
     let targetX = x;
     let targetY = y;
@@ -67,39 +96,83 @@ function movePlayer(direction) {
     if (direction === 'left') targetX--;
     if (direction === 'right') targetX++;
 
-    if (canMoveTo(level, targetX, targetY)) {
+    if (canMoveTo(targetX, targetY)) {
         playerDirection = direction;
 
-        if (level[targetY][targetX] === 2) {
+        if (dynamicLevel[targetY][targetX] === 2) {
             const pushX = targetX + (targetX - x);
             const pushY = targetY + (targetY - y);
 
-            if (canMoveTo(level, pushX, pushY, true)) {
-                level[targetY][targetX] = Levels[currentLevel][targetY][targetX] === 4 ? 4 : 0; 
-                level[pushY][pushX] = 2; 
+            if (canMoveTo(pushX, pushY, true)) {
+                dynamicLevel[targetY][targetX] = 0;
+                dynamicLevel[pushY][pushX] = 2;
             } else {
-                return; 
+                return;
             }
         }
 
-        level[y][x] = Levels[currentLevel][y][x] === 4 ? 4 : 0; 
-        level[targetY][targetX] = 3; 
+        dynamicLevel[y][x] = 0;
+        dynamicLevel[targetY][targetX] = 3;
         playerPosition = { x: targetX, y: targetY };
 
-        initGame(level);
+        renderGame();
+
+        if (isLevelComplete()) {
+            setTimeout(goToNextLevel, levelTransitionDelay); 
+        }
     }
 }
 
-function canMoveTo(level, x, y, isBoxPush = false) {
-    if (x < 0 || y < 0 || y >= level.length || x >= level[0].length) return false;
-    const tile = level[y][x];
+function canMoveTo(x, y, isBoxPush = false) {
+    if (x < 0 || y < 0 || y >= fixedLevel.length || x >= fixedLevel[0].length) {
+        return false;
+    }
 
-    if (tile === 0 || tile === 4) return true;
+    const fixedCell = fixedLevel[y][x];
+    const dynamicCell = dynamicLevel[y][x];
 
-    if (tile === 2 && !isBoxPush) return true;
+    if (fixedCell === 1) {
+        return false;
+    }
 
-    return false;
+    if (dynamicCell === 2) {
+        if (!isBoxPush) {
+            const pushX = x + (x - playerPosition.x);
+            const pushY = y + (y - playerPosition.y);
+            return canMoveTo(pushX, pushY, true);
+        }
+        return false;
+    }
+
+    return true;
 }
+
+function isLevelComplete() {
+    for (let y = 0; y < fixedLevel.length; y++) {
+        for (let x = 0; x < fixedLevel[y].length; x++) {
+            if (fixedLevel[y][x] === 4 && dynamicLevel[y][x] !== 2) {
+                return false; 
+            }
+        }
+    }
+    return true; 
+}
+
+function goToNextLevel() {
+    currentLevel++;
+    if (currentLevel >= Levels.length) {
+        alert('Félicitations ! Vous avez terminé tous les niveaux !');
+        currentLevel = 0; 
+    }
+    initGame(Levels[currentLevel]);
+}
+
+function resetLevel() {
+    initGame(Levels[currentLevel]);
+}
+
+resetButton.addEventListener('click', resetLevel);
+nextLevelButton.addEventListener('click', goToNextLevel);
 
 document.addEventListener('keydown', (event) => {
     const direction = keys[event.keyCode];
