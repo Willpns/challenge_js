@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Clicker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="background-pizzas"></div>
+    <div id="game">
+        <h1>Pizza Clicker</h1>
+        <div class="stats">
+            <p>Pizzas : <span id="money">0</span></p>
+            <p>Pizzas par seconde (PPS) : <span id="cps">0</span></p>
+        </div>
+        <div class="cookie-container">
+            <img src="images/pizza.avif" alt="Pizza" id="cookie-img" class="cookie-img">
+        </div>
+        <div id="floating-pizzas"></div>
+        <div id="golden-pizza-container"></div>
+        <button id="resetButton" class="reset-button">Réinitialiser</button>
+
+        <h2>Magasin</h2>
+        <div class="quantity-selector">
+            <button class="quantity-btn active" data-quantity="1">x1</button>
+            <button class="quantity-btn" data-quantity="10">x10</button>
+            <button class="quantity-btn" data-quantity="100">x100</button>
+        </div>
+        <div id="shop">
+            <div class="shop-item" data-cost="15" data-cps="1" data-base-cost="15">
+                <img src="images/four.png" alt="Amélioration +1" class="upgrade-img">
+                <p class="upgrade-text">+1 PPS (<span class="cost">15</span> pizzas)</p>
+                <p>Possédé: <span class="owned">0</span></p>
+                <button class="buy-btn">Acheter</button>
+            </div>
+            <div class="shop-item" data-cost="100" data-cps="5" data-base-cost="100">
+                <img src="images/livreur.png" alt="Amélioration +5" class="upgrade-img">
+                <p class="upgrade-text">+5 PPS (<span class="cost">100</span> pizzas)</p>
+                <p>Possédé: <span class="owned">0</span></p>
+                <button class="buy-btn">Acheter</button>
+            </div>
+            <div class="shop-item" data-cost="1100" data-cps="10" data-base-cost="1100">
+                <img src="images/pizzeria.png" alt="Amélioration +10" class="upgrade-img">
+                <p class="upgrade-text">+10 PPS (<span class="cost">1100</span> pizzas)</p>
+                <p>Possédé: <span class="owned">0</span></p>
+                <button class="buy-btn">Acheter</button>
+            </div>
+            <div class="shop-item" data-cost="12000" data-cps="50" data-base-cost="12000">
+                <img src="images/employé.png" alt="Amélioration +50" class="upgrade-img">
+                <p class="upgrade-text">+50 PPS (<span class="cost">12000</span> pizzas)</p>
+                <p>Possédé: <span class="owned">0</span></p>
+                <button class="buy-btn">Acheter</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
