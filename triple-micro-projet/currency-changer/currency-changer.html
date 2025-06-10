@@ -5,50 +5,181 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cash</title>
+    <title>Convertisseur de devises</title>
     <style>
-    * {
-    margin: 0;
-    padding: 0
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
 
-#container {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 100vh;
-    background-color: brown;
-}
+        body {
+            background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-.butt {
-    color: rgb(255, 255, 255);
-    background-color: gray;
-    border: 2px solid black;
-    border-radius: 4px;
-    width: 50px;
-    aspect-ratio: 1/1;
-    font-size: 30px;
-    transition: 1s;
-}
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotate 30s linear infinite;
+        }
 
-.butt:hover {
-    transition: 1s;
-    background-color: rgb(0, 94, 0);
-}
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-input[type="number"] {
-    font-size: 25px; 
-    border: 2px solid black;
-    background: white
-}
+        #container {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 90%;
+            max-width: 1200px;
+            gap: 3rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
 
+        .morice {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            min-width: 300px;
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
 
-.buttons {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-</style>
+        .morice:hover {
+            transform: translateY(-5px);
+        }
+
+        .butt {
+            color: white;
+            background: linear-gradient(135deg, #2c5364, #203a43);
+            border: none;
+            border-radius: 12px;
+            width: 65px;
+            height: 65px;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .butt::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .butt:hover::before {
+            left: 100%;
+        }
+
+        .butt:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .butt:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #2c5364;
+            box-shadow: 0 0 0 4px rgba(44, 83, 100, 0.15);
+        }
+
+        input[type="number"]:disabled {
+            background: #f8f9fa;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            #container {
+                flex-direction: column;
+                width: 95%;
+                padding: 2rem;
+            }
+
+            .morice {
+                width: 100%;
+                padding: 2rem;
+            }
+
+            .butt {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #output_div {
+            animation-delay: 0.3s;
+        }
+    </style>
 </head>
 
 <body style="overflow-y: hidden;overflow-x: hidden;">
