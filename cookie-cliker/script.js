@@ -13,6 +13,11 @@ let multiplier = 1; // Multiplicateur temporaire
 let productionMultiplier = 1; // Multiplicateur de production
 let priceReduction = 0; // Réduction de prix en pourcentage
 
+// Variables pour suivre le temps restant des effets
+let multiplierEndTime = 0;
+let productionMultiplierEndTime = 0;
+let priceReductionEndTime = 0;
+
 // Améliorations possibles pour la pizza d'or
 const goldenUpgrades = [
     { name: "Pizza x2", effect: () => { money *= 2; } },
@@ -21,9 +26,11 @@ const goldenUpgrades = [
         name: "Boost x3 (1min)", 
         effect: () => {
             multiplier = 3;
+            multiplierEndTime = Date.now() + 60000;
             showMessage("Boost x3 activé !");
             setTimeout(() => {
                 multiplier = 1;
+                multiplierEndTime = 0;
                 showMessage("Boost x3 terminé !");
             }, 60000);
         }
@@ -32,9 +39,11 @@ const goldenUpgrades = [
         name: "Inflation (2min)",
         effect: () => {
             productionMultiplier = 1.5;
+            productionMultiplierEndTime = Date.now() + 120000;
             showMessage("Inflation activée ! +50% de production");
             setTimeout(() => {
                 productionMultiplier = 1;
+                productionMultiplierEndTime = 0;
                 showMessage("Inflation terminée !");
             }, 120000);
         }
@@ -43,9 +52,11 @@ const goldenUpgrades = [
         name: "Réduction de prix (1min)",
         effect: () => {
             priceReduction = 20;
+            priceReductionEndTime = Date.now() + 60000;
             showMessage("Réduction de prix activée ! -20% sur tous les achats");
             setTimeout(() => {
                 priceReduction = 0;
+                priceReductionEndTime = 0;
                 showMessage("Réduction de prix terminée !");
             }, 60000);
         }
@@ -231,6 +242,18 @@ function showMessage(text) {
     setTimeout(() => message.remove(), 2000);
 }
 
+// Fonction pour formater le temps restant
+function formatTimeLeft(endTime) {
+    if (!endTime) return '';
+    const timeLeft = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    return {
+        text: ` (${minutes}:${seconds.toString().padStart(2, '0')})`,
+        isWarning: timeLeft <= 5
+    };
+}
+
 // Fonction pour afficher les effets actifs en haut à droite
 function updateActiveEffects() {
     let container = document.getElementById('active-effects');
@@ -246,19 +269,31 @@ function updateActiveEffects() {
 
     const effects = [];
     if (multiplier > 1) {
-        effects.push(`Boost x${multiplier}`);
+        const timeInfo = formatTimeLeft(multiplierEndTime);
+        effects.push({
+            text: `Boost x${multiplier}${timeInfo.text}`,
+            isWarning: timeInfo.isWarning
+        });
     }
     if (productionMultiplier > 1) {
-        effects.push(`Inflation +${Math.round((productionMultiplier - 1) * 100)}%`);
+        const timeInfo = formatTimeLeft(productionMultiplierEndTime);
+        effects.push({
+            text: `Inflation +${Math.round((productionMultiplier - 1) * 100)}%${timeInfo.text}`,
+            isWarning: timeInfo.isWarning
+        });
     }
     if (priceReduction > 0) {
-        effects.push(`Réduction -${priceReduction}%`);
+        const timeInfo = formatTimeLeft(priceReductionEndTime);
+        effects.push({
+            text: `Réduction -${priceReduction}%${timeInfo.text}`,
+            isWarning: timeInfo.isWarning
+        });
     }
 
     // Ne mettre à jour le contenu que si les effets ont changé
     const currentEffects = container.innerHTML;
     const newEffects = effects.map(effect => 
-        `<div class="active-effect">${effect}</div>`
+        `<div class="active-effect${effect.isWarning ? ' warning' : ''}">${effect.text}</div>`
     ).join('');
 
     if (effects.length > 0) {
