@@ -10,27 +10,43 @@ let selectedQuantity = 1;
 let lastClickTime = 0;
 let maxBackgroundPizzas = 20; // Limite le nombre de pizzas en arrière-plan
 let multiplier = 1; // Multiplicateur temporaire
+let productionMultiplier = 1; // Multiplicateur de production
+let priceReduction = 0; // Réduction de prix en pourcentage
 
 // Améliorations possibles pour la pizza d'or
 const goldenUpgrades = [
     { name: "Pizza x2", effect: () => { money *= 2; } },
     { name: "PPS x2", effect: () => { cps *= 2; } },
-    { name: "Pizza x10", effect: () => { money *= 10; } },
-    { name: "PPS x10", effect: () => { cps *= 10; } },
-    { name: "Pizza x100", effect: () => { money *= 100; } },
-    { name: "PPS x100", effect: () => { cps *= 100; } },
-    { name: "Pizza x1000", effect: () => { money *= 1000; } },
-    { name: "PPS x1000", effect: () => { cps *= 1000; } },
     { 
         name: "Boost x3 (1min)", 
         effect: () => {
             multiplier = 3;
-            // Afficher un message de début
             showMessage("Boost x3 activé !");
-            // Réinitialiser le multiplicateur après 1 minute
             setTimeout(() => {
                 multiplier = 1;
                 showMessage("Boost x3 terminé !");
+            }, 60000);
+        }
+    },
+    {
+        name: "Inflation (2min)",
+        effect: () => {
+            productionMultiplier = 1.5;
+            showMessage("Inflation activée ! +50% de production");
+            setTimeout(() => {
+                productionMultiplier = 1;
+                showMessage("Inflation terminée !");
+            }, 120000);
+        }
+    },
+    {
+        name: "Réduction de prix (1min)",
+        effect: () => {
+            priceReduction = 20;
+            showMessage("Réduction de prix activée ! -20% sur tous les achats");
+            setTimeout(() => {
+                priceReduction = 0;
+                showMessage("Réduction de prix terminée !");
             }, 60000);
         }
     }
@@ -106,22 +122,8 @@ function createGoldenPizza() {
         const upgrade = goldenUpgrades[Math.floor(Math.random() * goldenUpgrades.length)];
         upgrade.effect();
         
-        // Afficher un message
-        const message = document.createElement('div');
-        message.textContent = `Amélioration obtenue : ${upgrade.name}`;
-        message.style.position = 'fixed';
-        message.style.top = '50%';
-        message.style.left = '50%';
-        message.style.transform = 'translate(-50%, -50%)';
-        message.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        message.style.color = 'gold';
-        message.style.padding = '20px';
-        message.style.borderRadius = '10px';
-        message.style.zIndex = '1000';
-        document.body.appendChild(message);
-        
-        // Supprimer le message après 2 secondes
-        setTimeout(() => message.remove(), 2000);
+        // Afficher le message d'amélioration
+        showMessage(`Amélioration obtenue : ${upgrade.name}`);
         
         // Supprimer la pizza
         pizza.remove();
@@ -175,7 +177,14 @@ function saveGame() {
 function calculateCost(baseCost, owned) {
     // Augmentation de 15% par niveau, mais avec un plafond pour éviter les prix trop élevés
     const inflation = Math.min(1.15, 1 + (0.15 * Math.log10(owned + 1)));
-    return Math.floor(baseCost * Math.pow(inflation, owned));
+    let cost = Math.floor(baseCost * Math.pow(inflation, owned));
+    
+    // Appliquer la réduction de prix si active
+    if (priceReduction > 0) {
+        cost = Math.floor(cost * (1 - priceReduction / 100));
+    }
+    
+    return cost;
 }
 
 // Fonction pour formater les grands nombres
@@ -193,6 +202,73 @@ function formatNumber(number) {
         return (number / 1000).toFixed(1) + 'K';
     }
     return Math.floor(number);
+}
+
+// Fonction pour afficher les notifications temporaires au centre
+function showMessage(text) {
+    // Supprimer les messages existants avant d'en créer un nouveau
+    const existingMessages = document.querySelectorAll('.notification-message');
+    existingMessages.forEach(msg => msg.remove());
+
+    const message = document.createElement('div');
+    message.textContent = text;
+    message.className = 'notification-message';
+    message.style.position = 'fixed';
+    message.style.top = '50%';
+    message.style.left = '50%';
+    message.style.transform = 'translate(-50%, -50%)';
+    message.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+    message.style.color = 'gold';
+    message.style.padding = '20px 30px';
+    message.style.borderRadius = '10px';
+    message.style.zIndex = '9999';
+    message.style.fontSize = '1.2em';
+    message.style.fontWeight = 'bold';
+    message.style.textShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    message.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
+    message.style.border = '2px solid gold';
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 2000);
+}
+
+// Fonction pour afficher les effets actifs en haut à droite
+function updateActiveEffects() {
+    let container = document.getElementById('active-effects');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'active-effects';
+        container.style.position = 'fixed';
+        container.style.top = '20px';
+        container.style.right = '20px';
+        container.style.zIndex = '1000';
+        document.body.appendChild(container);
+    }
+
+    const effects = [];
+    if (multiplier > 1) {
+        effects.push(`Boost x${multiplier}`);
+    }
+    if (productionMultiplier > 1) {
+        effects.push(`Inflation +${Math.round((productionMultiplier - 1) * 100)}%`);
+    }
+    if (priceReduction > 0) {
+        effects.push(`Réduction -${priceReduction}%`);
+    }
+
+    // Ne mettre à jour le contenu que si les effets ont changé
+    const currentEffects = container.innerHTML;
+    const newEffects = effects.map(effect => 
+        `<div class="active-effect">${effect}</div>`
+    ).join('');
+
+    if (effects.length > 0) {
+        if (currentEffects !== newEffects) {
+            container.style.display = 'block';
+            container.innerHTML = newEffects;
+        }
+    } else {
+        container.style.display = 'none';
+    }
 }
 
 // Met à jour l'interface utilisateur
@@ -214,23 +290,9 @@ function updateUI() {
         const buyButton = item.querySelector(".buy-btn");
         buyButton.disabled = money < totalCost;
     });
-}
 
-// Fonction pour afficher les messages
-function showMessage(text) {
-    const message = document.createElement('div');
-    message.textContent = text;
-    message.style.position = 'fixed';
-    message.style.top = '50%';
-    message.style.left = '50%';
-    message.style.transform = 'translate(-50%, -50%)';
-    message.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-    message.style.color = 'gold';
-    message.style.padding = '20px';
-    message.style.borderRadius = '10px';
-    message.style.zIndex = '1000';
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 2000);
+    // Mettre à jour l'affichage des effets actifs
+    updateActiveEffects();
 }
 
 // Gérer les clics sur la pizza
@@ -318,7 +380,7 @@ setInterval(() => {
     lastAutoUpdate = currentTime;
 
     if (cps > 0) {
-        const pizzasToAdd = cps * deltaTime * multiplier; // Appliquer le multiplicateur
+        const pizzasToAdd = cps * deltaTime * multiplier * productionMultiplier; // Appliquer les multiplicateurs
         money += pizzasToAdd;
         
         // Ajouter les pizzas à la file d'attente
