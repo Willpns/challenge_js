@@ -87,24 +87,26 @@ function createFloatingPizza(x, y) {
 // Créer une pizza qui tombe (pour les clics automatiques)
 function createFallingPizza() {
     const backgroundContainer = document.getElementById('background-pizzas');
-    const currentPizzas = backgroundContainer.children.length;
-    
-    // Limiter le nombre de pizzas en arrière-plan à 50 maximum
-    if (currentPizzas >= 50) {
-        // Supprimer la plus ancienne pizza si on atteint la limite
-        const oldestPizza = backgroundContainer.firstChild;
-        if (oldestPizza) {
-            oldestPizza.remove();
-        }
-    }
-
     const pizza = document.createElement('img');
     pizza.src = 'images/pizza.avif';
     pizza.className = 'falling-pizza';
     
-    // Position aléatoire horizontale
-    const x = Math.random() * window.innerWidth;
+    // Position aléatoire horizontale avec une meilleure distribution
+    const x = Math.random() * (window.innerWidth - 30); // 30 est la largeur de la pizza
     pizza.style.left = `${x}px`;
+    
+    // Sélectionner une animation aléatoire
+    const animations = [
+        'fall-right',
+        'fall-left',
+        'fall-spiral',
+        'fall-bounce'
+    ];
+    const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+    
+    // Vitesse de chute aléatoire pour plus de naturel
+    const duration = 2 + Math.random() * 1; // Entre 2 et 3 secondes
+    pizza.style.animation = `${randomAnimation} ${duration}s linear forwards`;
     
     backgroundContainer.appendChild(pizza);
     
@@ -407,7 +409,7 @@ document.getElementById("resetButton").addEventListener("click", () => {
 // Générer des pizzas automatiquement
 let lastAutoUpdate = Date.now();
 let pizzaQueue = 0; // Pour gérer les fractions de pizza
-const MAX_VISIBLE_PPS = 50; // Nombre maximum de pizzas visibles par seconde
+const MAX_VISIBLE_PPS = 700; // Nombre maximum de pizzas visibles par seconde
 
 setInterval(() => {
     const currentTime = Date.now();
@@ -418,16 +420,26 @@ setInterval(() => {
         const pizzasToAdd = cps * deltaTime * multiplier * productionMultiplier; // Appliquer les multiplicateurs
         money += pizzasToAdd;
         
-        // Ajouter les pizzas à la file d'attente
-        pizzaQueue += pizzasToAdd;
-        
-        // Calculer le nombre de pizzas à afficher en fonction du PPS
+        // Calculer le nombre de pizzas visibles en fonction du PPS
         const visiblePPS = Math.min(cps, MAX_VISIBLE_PPS);
+        const targetPizzaCount = Math.floor(visiblePPS);
+        const currentPizzaCount = document.querySelectorAll('.falling-pizza').length;
         
-        // Créer une pizza si on a accumulé suffisamment de pizzas
-        if (pizzaQueue >= 1) {
-            createFallingPizza();
-            pizzaQueue -= 1;
+        // Ajouter ou supprimer des pizzas pour correspondre au nombre cible
+        if (currentPizzaCount < targetPizzaCount) {
+            // Ajouter des pizzas jusqu'à atteindre le nombre cible
+            for (let i = currentPizzaCount; i < targetPizzaCount; i++) {
+                createFallingPizza();
+            }
+        } else if (currentPizzaCount > targetPizzaCount) {
+            // Supprimer les pizzas en trop
+            const pizzasToRemove = currentPizzaCount - targetPizzaCount;
+            const fallingPizzas = document.querySelectorAll('.falling-pizza');
+            for (let i = 0; i < pizzasToRemove; i++) {
+                if (fallingPizzas[i]) {
+                    fallingPizzas[i].remove();
+                }
+            }
         }
         
         updateUI();
